@@ -151,9 +151,9 @@
                                 <h2 class="h4 mb-3">Product status</h2>
                                 <div class="mb-3">
                                     <select name="status" id="status" class="form-control">
-                                        <option @if ($product->stauts == '1') selected @endif value="1">Active
+                                        <option @if ($product->status ==1) selected @endif value="1">Active
                                         </option>
-                                        <option @if ($product->stauts == '0') selected @endif value="0">Block
+                                        <option @if ($product->status ==0) selected @endif value="0">Block
                                         </option>
                                     </select>
                                 </div>
