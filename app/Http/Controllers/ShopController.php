@@ -14,6 +14,10 @@ class ShopController extends Controller
     {
         $categorySelected='';
         $subCategorySelected='';
+        $brandArray=[];
+
+
+
 
         $categories = Category::where('status', '1')->where('showHome', 'Yes')->orderBy('name', 'ASC')->get();
         $brands = Brand::where('status', '1')->orderBy('name', 'ASC')->get();
@@ -37,8 +41,16 @@ class ShopController extends Controller
             $subCategorySelected=$subCategory->id;
         }
 
+        //filter by brands
+        if(!empty($request->get('brand'))){
+            //explode method will break string by the basis of , and store into brandArray
+            $brandArray=explode(',',$request->get('brand'));
+            $products = $products->whereIn('brand_id', $brandArray);
+         }
+
+
         $products = $products->orderBy('name', 'ASC')->get();
 
-        return view('front.shop', compact('categories', 'brands', 'products','subCategorySelected','categorySelected'));
+        return view('front.shop', compact('categories', 'brands', 'products','subCategorySelected','categorySelected','brandArray'));
     }
 }

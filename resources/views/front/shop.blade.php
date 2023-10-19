@@ -36,12 +36,13 @@
                                                     </button>
                                                 </h2>
                                             @else
-                                                <a class="nav-link nav-item {{($categorySelected==$category->id)? 'text-primary': ''}} "
+                                                <a class="nav-link nav-item {{ $categorySelected == $category->id ? 'text-primary' : '' }} "
                                                     href="{{ route('shop.home', $category->slug) }}">{{ $category->name }}</a>
                                             @endif
 
                                             @if ($category->sub_categories->isNotEmpty())
-                                                <div id="collapse{{ $key }}" class="accordion-collapse collapse {{($categorySelected==$category->id)? 'show': ''}}"
+                                                <div id="collapse{{ $key }}"
+                                                    class="accordion-collapse collapse {{ $categorySelected == $category->id ? 'show' : '' }}"
                                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample"
                                                     style="">
                                                     <div class="accordion-body">
@@ -50,7 +51,7 @@
                                                             @foreach ($category->sub_categories as $subCategory)
                                                                 @if ($subCategory->status == 1 && $subCategory->showHome == 'Yes')
                                                                     <a href="{{ route('shop.home', [$category->slug, $subCategory->slug]) }}"
-                                                                        class="nav-item nav-link {{($subCategorySelected==$subCategory->id)? 'text-primary': ''}}">{{ $subCategory->name }}</a>
+                                                                        class="nav-item nav-link {{ $subCategorySelected == $subCategory->id ? 'text-primary' : '' }}">{{ $subCategory->name }}</a>
                                                                 @endif
                                                             @endforeach
 
@@ -73,9 +74,9 @@
                         <div class="card-body">
                             @foreach ($brands as $brand)
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" name="brands[]" type="checkbox"
-                                        value="{{ $brand->id }}" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
+                                    <input {{in_array($brand->id,$brandArray) ? 'checked': '' }} class="form-check-input brandCheck" name="brands[]" type="checkbox"
+                                        value="{{ $brand->id }}" id="flexCheckDefault{{ $brand->id }}">
+                                    <label class="form-check-label" for="flexCheckDefault{{ $brand->id }}">
                                         {{ $brand->name }}
                                     </label>
                                 </div>
@@ -195,4 +196,25 @@
             </div>
         </div>
     </section>
+@endsection
+@section('customJs')
+    <script>
+        $('.brandCheck').change(function() {
+            //if brand check change then this method will call
+            applyFilter()
+        });
+
+        function applyFilter() {
+            let brands = [];
+
+            //when any brand is checked then the value of brand id will push in brands arry
+            $('.brandCheck').each(function() {
+                if ($(this).is(":checked") == true) {
+                    brands.push($(this).val())
+                }
+            })
+            let url = "{{ url()->current() }}?";
+            window.location.href = url +'&brand='+brands.toString();
+        }
+    </script>
 @endsection
