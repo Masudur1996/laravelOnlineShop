@@ -18,8 +18,8 @@ use Illuminate\Support\Str;
 
 
 
-Route::get('/',[FrontController::class,'index'])->name('front.home');
-Route::get('/shop',[ShopController::class,'index'])->name('shop.home');
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
+Route::get('/shop/{cateorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('shop.home');
 
 Route::group(['prefix' => 'admin'], function () {
 
@@ -64,24 +64,24 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/brand/status', [BrandController::class, 'status'])->name('brand.status');
 
         //Route for product
-        Route::get('/product',[ProductController::class,'index'])->name('product.index');
-        Route::get('/product/create',[ProductController::class,'create'])->name('product.create');
-        Route::post('/product/store',[ProductController::class,'store'])->name('product.store');
-        Route::get('/product/{id}/edit',[ProductController::class,'edit'])->name('product.edit');
-        Route::post('/product/update',[ProductController::class,'update'])->name('product.update');
-        Route::post('/product/destroy',[ProductController::class,'destroy'])->name('product.destroy');
+        Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('/product/update', [ProductController::class, 'update'])->name('product.update');
+        Route::post('/product/destroy', [ProductController::class, 'destroy'])->name('product.destroy');
 
 
         //for add image during update
-        Route::post('/product-image/update',[ProductController::class,'imageUpdate'])->name('product-image.update');
+        Route::post('/product-image/update', [ProductController::class, 'imageUpdate'])->name('product-image.update');
         //for delete image during update
-        Route::post('/product-image/delete',[ProductController::class,'imageDelete'])->name('product-image.delete');
+        Route::post('/product-image/delete', [ProductController::class, 'imageDelete'])->name('product-image.delete');
         //for procut sub category show in form
-        Route::get('/product/sub-category',[ProductController::class,'subCategory'])->name('product.sub-category');
+        Route::get('/product/sub-category', [ProductController::class, 'subCategory'])->name('product.sub-category');
 
 
         //for temp image
-         Route::post('/temp-image',[TempImageController::class,'create'])->name('temp-images.create');
+        Route::post('/temp-image', [TempImageController::class, 'create'])->name('temp-images.create');
         //for prepare  slug
         Route::get('/change/slug', function (Request $request) {
             $slug = Str::slug($request->name);

@@ -36,11 +36,12 @@
                                                     </button>
                                                 </h2>
                                             @else
-                                                <a class="nav-link nav-item" href="">{{ $category->name }}</a>
+                                                <a class="nav-link nav-item {{($categorySelected==$category->id)? 'text-primary': ''}} "
+                                                    href="{{ route('shop.home', $category->slug) }}">{{ $category->name }}</a>
                                             @endif
 
                                             @if ($category->sub_categories->isNotEmpty())
-                                                <div id="collapse{{ $key }}" class="accordion-collapse collapse"
+                                                <div id="collapse{{ $key }}" class="accordion-collapse collapse {{($categorySelected==$category->id)? 'show': ''}}"
                                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample"
                                                     style="">
                                                     <div class="accordion-body">
@@ -48,8 +49,8 @@
 
                                                             @foreach ($category->sub_categories as $subCategory)
                                                                 @if ($subCategory->status == 1 && $subCategory->showHome == 'Yes')
-                                                                    <a href=""
-                                                                        class="nav-item nav-link">{{ $subCategory->name }}</a>
+                                                                    <a href="{{ route('shop.home', [$category->slug, $subCategory->slug]) }}"
+                                                                        class="nav-item nav-link {{($subCategorySelected==$subCategory->id)? 'text-primary': ''}}">{{ $subCategory->name }}</a>
                                                                 @endif
                                                             @endforeach
 
