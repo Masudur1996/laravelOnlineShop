@@ -5,7 +5,7 @@
         <div class="container">
             <div class="light-font">
                 <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="white-text" href="{{route('front.home')}}">Home</a></li>
                     <li class="breadcrumb-item active">Shop</li>
                 </ol>
             </div>
@@ -74,7 +74,8 @@
                         <div class="card-body">
                             @foreach ($brands as $brand)
                                 <div class="form-check mb-2">
-                                    <input {{in_array($brand->id,$brandArray) ? 'checked': '' }} class="form-check-input brandCheck" name="brands[]" type="checkbox"
+                                    <input {{ in_array($brand->id, $brandArray) ? 'checked' : '' }}
+                                        class="form-check-input brandCheck" name="brands[]" type="checkbox"
                                         value="{{ $brand->id }}" id="flexCheckDefault{{ $brand->id }}">
                                     <label class="form-check-label" for="flexCheckDefault{{ $brand->id }}">
                                         {{ $brand->name }}
@@ -91,30 +92,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    $0-$100
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $100-$200
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $200-$500
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $500+
-                                </label>
-                            </div>
+                            <input type="text" class="js-range-slider" name="my_range" value="" />
                         </div>
                     </div>
                 </div>
@@ -124,13 +102,14 @@
                             <div class="d-flex align-items-center justify-content-end mb-4">
                                 <div class="ml-2">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                            data-bs-toggle="dropdown">Sorting</button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">Latest</a>
-                                            <a class="dropdown-item" href="#">Price High</a>
-                                            <a class="dropdown-item" href="#">Price Low</a>
-                                        </div>
+                                        <select name="sort" id="sort">
+                                            <option value="">Sort</option>
+                                            <option {{ $sort == 'latest' ? 'selected' : '' }} value="latest">Latest</option>
+                                            <option {{ $sort == 'price_asc' ? 'selected' : '' }} value="price_asc">Price
+                                                Low to High</option>
+                                            <option {{ $sort == 'price_desc' ? 'selected' : '' }} value="price_desc">Price
+                                                High to Low</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -146,15 +125,15 @@
                                             @php
                                                 $image = $product->product_images->first();
                                             @endphp
-                                            <a href="" class="product-img"><img class="card-img-top"
+                                            <a href="{{route('front.product',$product->slug)}}" class="product-img"><img class="card-img-top"
                                                     src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                     alt=""></a>
-                                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <a class="whishlist" href="#"><i class="far fa-heart"></i></a>
                                         @else
-                                            <a href="" class="product-img"><img class="card-img-top"
+                                            <a href="{{route('front.product',$product->slug)}}" class="product-img"><img class="card-img-top"
                                                     src="{{ asset('admin-asset/img/default-150x150.png') }}"
                                                     alt=""></a>
-                                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <a class="whishlist" href="#"><i class="far fa-heart"></i></a>
                                         @endif
 
                                         <div class="product-action">
@@ -167,8 +146,7 @@
                                         <a class="h6 link" href="product.php">{{ $product->name }}</a>
                                         <div class="price mt-2">
                                             <span class="h5"><strong>{{ $product->price }}</strong></span>
-                                            <span
-                                                class="h6 text-underline"><del>{{ $product->compare_price }}</del></span>
+                                            <span class="h6 text-underline"><del>{{ $product->compare_price }}</del></span>
                                         </div>
                                     </div>
                                 </div>
@@ -177,18 +155,7 @@
 
                         <div class="col-md-12 pt-5">
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1"
-                                            aria-disabled="true">Previous</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
+                                {{$products->withQueryString()->links()}}
                             </nav>
                         </div>
                     </div>
@@ -199,10 +166,35 @@
 @endsection
 @section('customJs')
     <script>
+        //for range slider
+        $(".js-range-slider").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 40000,
+            from: {{ $price_min }},
+            step: 50,
+            to: {{ $price_max }},
+            skin: "round",
+            max_postfix: "+",
+            prefix: "$",
+            onFinish: function() {
+                applyFilter();
+            }
+        });
+
+        //for getting data from range slider
+        var slider = $(".js-range-slider").data("ionRangeSlider");
+
         $('.brandCheck').change(function() {
             //if brand check change then this method will call
             applyFilter()
         });
+
+        $('#sort').change(function() {
+            //if sort option change then this method will call
+            applyFilter()
+        });
+
 
         function applyFilter() {
             let brands = [];
@@ -213,8 +205,20 @@
                     brands.push($(this).val())
                 }
             })
+
             let url = "{{ url()->current() }}?";
-            window.location.href = url +'&brand='+brands.toString();
+
+            url += '&price_min=' + slider.result.from + '&price_max=' + slider.result.to;
+            if (brands.length > 0) {
+                url += '&brand=' + brands.toString();
+            }
+
+
+
+            url += '&sort=' + $('#sort').val();
+
+
+            window.location.href = url
         }
     </script>
 @endsection

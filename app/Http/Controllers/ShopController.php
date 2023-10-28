@@ -12,9 +12,13 @@ class ShopController extends Controller
 {
     public function index(Request $request, $cateorySlug = null, $subCategorySlug = null)
     {
-        $categorySelected='';
-        $subCategorySelected='';
-        $brandArray=[];
+        $categorySelected = '';
+        $subCategorySelected = '';
+        $brandArray = [];
+        $price_min = 0;
+        $price_max = 0;
+        $sort = '';
+
 
 
 
@@ -29,28 +33,64 @@ class ShopController extends Controller
         if (!empty($cateorySlug)) {
             //here user first() method for get the 1st cateroy
             $category = Category::where('slug', $cateorySlug)->first();
-            $products = Product::where('category_id', $category->id);
-            $categorySelected=$category->id;
+            $products = $products->where('category_id', $category->id);
+            $categorySelected = $category->id;
         }
 
         //filter by subCategory
         if (!empty($subCategorySlug)) {
             //here user first() method for get the 1st cateroy
             $subCategory = SubCategory::where('slug', $subCategorySlug)->first();
-            $products = Product::where('sub_category_id', $subCategory->id);
-            $subCategorySelected=$subCategory->id;
+            $products = $products->where('sub_category_id', $subCategory->id);
+            $subCategorySelected = $subCategory->id;
         }
 
         //filter by brands
-        if(!empty($request->get('brand'))){
+        if (!empty($request->get('brand'))) {
             //explode method will break string by the basis of , and store into brandArray
-            $brandArray=explode(',',$request->get('brand'));
+            $brandArray = explode(',', $request->get('brand'));
             $products = $products->whereIn('brand_id', $brandArray);
-         }
+        }
+        if ($request->get('price_min') != '' && $request->get('price_max') != '') {
+            $price_min = intval($request->get('price_min'));
+            $price_max = intval($request->get('price_max'));
+
+            if ($price_max == 40000) {
+                $products = $products->whereBetween('price', [$price_min, 40000000]);
+            } else {
+                $products = $products->whereBetween('price', [$price_min, $price_max]);
+            }
+        }
+
+        if ($price_max == 0) {
+            $price_max = 40000;
+        }
 
 
-        $products = $products->orderBy('name', 'ASC')->get();
+        if ($request->get('sort') != '') {
+            if ($request->get('sort') == 'price_desc') {
+                $products = $products->orderBy('price', 'DESC');
+            } elseif ($request->get('sort') == 'price_asc') {
+                $products = $products->orderBy('price', 'ASC');
+            } else {
+                $products = $products->orderBy('id', 'DESC');
+            }
 
-        return view('front.shop', compact('categories', 'brands', 'products','subCategorySelected','categorySelected','brandArray'));
+            $sort = $request->get('sort');
+        } else {
+            $products = $products->orderBy('id', 'DESC');
+        }
+
+
+
+
+        $products = $products->paginate(9);
+
+        return view('front.shop', compact('categories', 'brands', 'products', 'subCategorySelected', 'categorySelected', 'brandArray', 'price_min', 'price_max', 'sort'));
+    }
+
+    public function product($slug){
+         $product=Product::where('slug',$slug)->first();
+         return view('front.product',compact('product'));
     }
 }

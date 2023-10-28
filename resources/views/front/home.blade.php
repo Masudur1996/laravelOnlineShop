@@ -18,7 +18,7 @@
                             <h1 class="display-4 text-white mb-3">Kids Fashion</h1>
                             <p class="mx-md-5 px-5">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo
                                 stet amet amet ndiam elitr ipsum diam</p>
-                            <a  class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
+                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -117,8 +117,10 @@
                                 </div>
                                 <div class="right">
                                     <div class="cat-data">
-                                        <h2>{{ $category->name }}</h2>
-                                        <p>{{ $category->products->sum('qty') }}</p>
+                                        <a href="{{route('shop.home',$category->slug)}}" class="text-black">
+                                            <h2>{{ $category->name }}</h2>
+                                            <p>{{ $category->products->sum('qty') }}</p>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -143,13 +145,14 @@
                                     @php
                                         $image = $featuredProduct->product_images->first();
                                     @endphp
+
                                     @if ($image)
-                                        <a href="" class="product-img"><img class="card-img-top"
+                                        <a href="{{route('front.product',[$featuredProduct->slug])}}" class="product-img"><img class="card-img-top"
                                                 src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
                                     @else
-                                        <a href="" class="product-img"><img class="card-img-top"
+                                        <a href="{{route('front.product',[$featuredProduct->slug])}}" class="product-img"><img class="card-img-top"
                                                 src="{{ asset('admin-asset/img/default-150x150.png') }}"
                                                 alt="Loaing"></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
@@ -194,12 +197,12 @@
                                         $image = $latestProduct->product_images->first();
                                     @endphp
                                     @if ($image)
-                                        <a href="" class="product-img"><img class="card-img-top"
+                                        <a href="{{route('front.product',[$latestProduct->slug])}}" class="product-img"><img class="card-img-top"
                                                 src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
                                     @else
-                                        <a href="" class="product-img"><img class="card-img-top"
+                                        <a href="{{route('front.product',[$latestProduct->slug])}}" class="product-img"><img class="card-img-top"
                                                 src="{{ asset('admin-asset/img/default-150x150.png') }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>

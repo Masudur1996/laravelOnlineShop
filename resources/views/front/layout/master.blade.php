@@ -37,6 +37,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('front-asset/css/slick-theme.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-asset/css/video-js.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-asset/css/style.css') }}" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css" />
+
+
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +59,7 @@
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
-                    <a href="index.php" class="text-decoration-none">
+                    <a href="{{route('front.home')}}" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                     </a>
@@ -97,16 +101,24 @@
                         @if (categories()->isNotEmpty())
                             @foreach (categories() as $category)
                                 <li class="nav-item dropdown">
-                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        {{ $category->name }}
-                                    </button>
+
+                                    @if ($category->sub_categories->isNotEmpty())
+                                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            {{ $category->name }}
+                                        </button>
+                                    @else
+                                        <a href="{{route('shop.home',[$category->slug])}}" class="btn btn-dark">
+                                            {{ $category->name }}
+                                        </a>
+                                    @endif
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         @if ($category->sub_categories->isNotEmpty())
                                             @foreach ($category->sub_categories as $subCategory)
                                                 @if ($subCategory->status == '1' && $subCategory->showHome == 'Yes')
                                                     <li><a class="dropdown-item nav-link"
-                                                            href="#">{{ $subCategory->name }}</a></li>
+                                                            href="{{ route('shop.home', [$category->slug, $subCategory->slug]) }}">{{ $subCategory->name }}</a>
+                                                    </li>
                                                 @endif
                                             @endforeach
                                         @endif
@@ -128,7 +140,7 @@
 
     <!-- main section starts from here -->
     <main>
-          @yield('content')
+        @yield('content')
     </main>
     <!-- main section ends from here -->
 
@@ -189,6 +201,7 @@
     <script src="{{ asset('front-asset/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('front-asset/js/slick.min.js') }}"></script>
     <script src="{{ asset('front-asset/js/custom.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
 
     <script>
         window.onscroll = function() {
