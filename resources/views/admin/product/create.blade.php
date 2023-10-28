@@ -9,7 +9,7 @@
                     <h1>Create Product</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{route('product.index')}}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('product.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -48,6 +48,19 @@
                                                 placeholder="Description"></textarea>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="short_description">Short Description</label>
+                                            <textarea name="short_description" id="short_description" class="summernote"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="related_products">Related Product</label>
+                                            <textarea name="related_products" id="related_products" class="summernote"></textarea>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -194,7 +207,7 @@
 
                 <div class="pb-5 pt-3">
                     <button type='submit' class="btn btn-primary">Create</button>
-                    <a href="{{route('product.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('product.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </div>
         </form>
@@ -283,7 +296,7 @@
                     contentType: false,
 
                     success: function(res) {
-                        window.location.href='{{route('product.index')}}';
+                        window.location.href = '{{ route('product.index') }}';
                     },
                     error: function(err) {
                         if (err.responseJSON.errors.name) {
@@ -352,14 +365,14 @@
                             </div>
                             </div></div>`;
                 $('#showImage').append(html);
-            },complete:function(file){
+            },
+            complete: function(file) {
                 this.removeFile(file);
             }
         });
         //end of dropzone
-        function deleteDropzoneImage(id){
-            $('#deleteImage'+id).remove();
+        function deleteDropzoneImage(id) {
+            $('#deleteImage' + id).remove();
         }
-
     </script>
 @endsection

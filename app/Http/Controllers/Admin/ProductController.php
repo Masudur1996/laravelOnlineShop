@@ -59,6 +59,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->slug = $request->slug;
         $product->description = $request->description;
+        $product->short_description = $request->short_description;
+        $product->related_products = $request->related_products;
         $product->price = $request->price;
         $product->compare_price = $request->compare_price;
         $product->sku = $request->sku;
@@ -164,6 +166,8 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->slug = $request->slug;
             $product->description = $request->description;
+            $product->short_description = $request->short_description;
+            $product->related_products = $request->related_products;
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
             $product->sku = $request->sku;
