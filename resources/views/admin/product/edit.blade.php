@@ -55,12 +55,7 @@
                                             <textarea name="short_description" id="short_description" class="summernote">{{ $product->short_description }}</textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label for="related_products">Related Product</label>
-                                            <textarea name="related_products" id="related_products" class="summernote">{{ $product->related_products }}</textarea>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
