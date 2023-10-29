@@ -54,12 +54,6 @@
                                             <textarea name="short_description" id="short_description" class="summernote"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label for="related_products">Related Product</label>
-                                            <textarea name="related_products" id="related_products" class="summernote"></textarea>
-                                        </div>
-                                    </div>
 
                                 </div>
                             </div>
@@ -138,6 +132,21 @@
                                             <input type="number" min="0" name="qty" id="qty"
                                                 class="form-control" placeholder="Qty">
                                             <span class="text-danger" id='qtyError'></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="h4 mb-3">Related Products</h2>
+                                        <div class="mb-3">
+                                            <select multiple class="related_products w-100" name="related_products[]" id="related_products">
+
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -334,7 +343,21 @@
                 })
             })
         })
-
+        //for select2 option in related_product
+        $('.related_products').select2({
+            ajax: {
+                url: '{{ route("product.getProducts") }}',
+                dataType: 'json',
+                tags: true,
+                multiple: true,
+                minimumInputLength: 3,
+                processResults: function(data) {
+                    return {
+                        results: data.tags
+                    };
+                }
+            }
+        });
         //start of dropzone
         Dropzone.autoDiscover = false;
         const dropzone = $("#image").dropzone({

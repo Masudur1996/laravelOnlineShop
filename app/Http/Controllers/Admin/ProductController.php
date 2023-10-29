@@ -31,8 +31,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $data['categories'] = Category::where('status','1')->OrderBy('name', 'ASC')->get();
-        $data['brands'] = Brand::where('status','1')->OrderBy('name', 'ASC')->get();
+        $data['categories'] = Category::where('status', '1')->OrderBy('name', 'ASC')->get();
+        $data['brands'] = Brand::where('status', '1')->OrderBy('name', 'ASC')->get();
         return view('admin.product.create', $data);
     }
 
@@ -72,6 +72,10 @@ class ProductController extends Controller
         $product->category_id = $request->category;
         $product->sub_category_id = $request->sub_category;
         $product->brand_id = $request->brand;
+
+        if ($request->get('related_products') != "") {
+            $product->related_products = implode(',', $request->get('related_products'));
+        }
         $product->save();
 
         if ($request->image) {
@@ -135,8 +139,24 @@ class ProductController extends Controller
         $product = Product::find($id);
         $categories = Category::OrderBy('name', 'ASC')->get();
         $brands = Brand::OrderBy('name', 'ASC')->get();
+
+
         if ($product) {
-            return view('admin.product.edit', compact('categories', 'brands', 'product'));
+
+            //fetch related product
+            $relatedProducts = [];
+            if ($product->related_products != '') {
+                $productArray=explode(',',$product->related_products);
+
+                $relatedProducts=Product::whereIn('id',$productArray)->get();
+            }
+
+
+
+
+
+
+            return view('admin.product.edit', compact('categories', 'brands', 'product','relatedProducts'));
         } else {
             Session::flash('error', 'Product not found');
             return redirect()->route('product.index');
@@ -179,6 +199,7 @@ class ProductController extends Controller
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
+            $product->related_products = ($request->get('related_products') != "") ? implode(',', $request->get('related_products')) : " ";
             $product->save();
 
             Session::flash('success', 'Product Updated successfully !');
@@ -270,6 +291,22 @@ class ProductController extends Controller
 
         return response()->json([
             'status' => 'success'
+        ]);
+    }
+
+    public function getProducts(Request $request)
+    {
+        $tempProduct = [];
+        if ($request->get('term') != "") {
+            $products = Product::where('name', 'like', '%' . $request->get('term') . '%')->get();
+        }
+        foreach ($products as $key => $product) {
+            $tempProduct[] = array('id' => $product->id, 'text' => $product->name);
+        }
+
+        return response()->json([
+            'tags' => $tempProduct,
+            'status' => true,
         ]);
     }
 }

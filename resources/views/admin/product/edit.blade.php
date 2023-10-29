@@ -77,14 +77,15 @@
                         <div class="card">
                             <div class="row" id="showImage">
                                 @foreach ($product->product_images as $image)
-                                    <div class="col-sm-3 mt-3" id="imageRow{{$image->id}}">
+                                    <div class="col-sm-3 mt-3" id="imageRow{{ $image->id }}">
                                         <div class="card">
                                             <input type="hidden" name="image[]" value="">
                                             <img class="card-img-top"
                                                 src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                 alt="Card image cap">
                                             <div class="card-body">
-                                                <a onclick="deleteImage({{$image->id}})" class="btn btn-sm btn-danger">Delete</a>
+                                                <a onclick="deleteImage({{ $image->id }})"
+                                                    class="btn btn-sm btn-danger">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -156,6 +157,27 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="h4 mb-3">Related Products</h2>
+                                        <div class="mb-3">
+                                            <select multiple class="related_products w-100" name="related_products[]"
+                                                id="related_products">
+                                               @if($relatedProducts!='')
+                                                   @foreach ($relatedProducts as $relatedProduct )
+                                                        <option selected value="{{$relatedProduct->id}}">{{$relatedProduct->name}}</option>
+                                                   @endforeach
+                                               @endif
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3">
@@ -163,9 +185,9 @@
                                 <h2 class="h4 mb-3">Product status</h2>
                                 <div class="mb-3">
                                     <select name="status" id="status" class="form-control">
-                                        <option @if ($product->status ==1) selected @endif value="1">Active
+                                        <option @if ($product->status == 1) selected @endif value="1">Active
                                         </option>
-                                        <option @if ($product->status ==0) selected @endif value="0">Block
+                                        <option @if ($product->status == 0) selected @endif value="0">Block
                                         </option>
                                     </select>
                                 </div>
@@ -359,6 +381,21 @@
         })
         //end of jquery code section
 
+        //for select2 option in related_product
+        $('.related_products').select2({
+            ajax: {
+                url: '{{ route('product.getProducts') }}',
+                dataType: 'json',
+                tags: true,
+                multiple: true,
+                minimumInputLength: 3,
+                processResults: function(data) {
+                    return {
+                        results: data.tags
+                    };
+                }
+            }
+        });
 
 
         //for dropzone
@@ -394,19 +431,22 @@
                             </div>
                             </div></div>`;
                 $('#showImage').append(html);
-            },complete:function(file){
+            },
+            complete: function(file) {
                 this.removeFile(file)
             }
         });
 
         function deleteImage(id) {
 
-            $('#imageRow'+id).remove();
+            $('#imageRow' + id).remove();
             $.ajax({
-                url:'{{route('product-image.delete')}}',
-                method:'post',
-                data:{id:id},
-                success:function(res){
+                url: '{{ route('product-image.delete') }}',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(res) {
 
                 }
             })

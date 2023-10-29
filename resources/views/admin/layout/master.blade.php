@@ -15,6 +15,9 @@
 		<link rel="stylesheet" href="{{asset('admin-asset/css/custom.css')}}">
         <link rel="stylesheet" href="{{asset('admin-asset/plugins/dropzone/min/dropzone.min.css')}}">
 
+        <!-- css for select2  -->
+        <link rel="stylesheet" href="{{asset('admin-asset/plugins/select2/css/select2.min.css')}}">
+
         <!-- css for summernote -->
         <link rel="stylesheet" href="{{asset('admin-asset/plugins/summernote/summernote-bs4.css')}}">
 
@@ -101,6 +104,9 @@
 		<script src="{{asset('admin-asset/js/demo.js')}}"></script>
         <!-- For dropzone -->
         <script src="{{asset('admin-asset/plugins/dropzone/min/dropzone.min.js')}}"></script>
+
+        <!-- js for select2 -->
+        <script src="{{asset('admin-asset/plugins/select2/js/select2.min.js')}}"></script>
          <!-- Summernote -->
          <script src="{{asset('admin-asset/plugins/summernote/summernote-bs4.js')}}"></script>
         <script>

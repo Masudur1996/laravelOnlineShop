@@ -74,6 +74,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/product/update', [ProductController::class, 'update'])->name('product.update');
         Route::post('/product/destroy', [ProductController::class, 'destroy'])->name('product.destroy');
 
+        //for related product filed
+        Route::get('/product/get-product',[ProductController::class,'getProducts'])->name('product.getProducts');
+
 
         //for add image during update
         Route::post('/product-image/update', [ProductController::class, 'imageUpdate'])->name('product-image.update');
