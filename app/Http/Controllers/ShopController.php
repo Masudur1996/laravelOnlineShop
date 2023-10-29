@@ -89,8 +89,22 @@ class ShopController extends Controller
         return view('front.shop', compact('categories', 'brands', 'products', 'subCategorySelected', 'categorySelected', 'brandArray', 'price_min', 'price_max', 'sort'));
     }
 
-    public function product($slug){
-         $product=Product::where('slug',$slug)->first();
-         return view('front.product',compact('product'));
+    public function product($slug)
+    {
+
+        $product = Product::where('slug', $slug)->first();
+
+        if ($product==null) {
+            abort(404);
+        } else {
+            $relatedProducts = [];
+
+            if ($product->related_products != '') {
+                $productArray = explode(',', $product->related_products);
+
+                $relatedProducts = Product::whereIn('id', $productArray)->get();
+            }
+            return view('front.product', compact('product', 'relatedProducts'));
+        }
     }
 }

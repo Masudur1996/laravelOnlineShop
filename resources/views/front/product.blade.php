@@ -5,9 +5,9 @@
         <div class="container">
             <div class="light-font">
                 <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="{{route('front.home')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a class="white-text" href="{{route('shop.home')}}">Shop</a></li>
-                    <li class="breadcrumb-item">{{$product->name}}</li>
+                    <li class="breadcrumb-item"><a class="white-text" href="{{ route('front.home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a class="white-text" href="{{ route('shop.home') }}">Shop</a></li>
+                    <li class="breadcrumb-item">{{ $product->name }}</li>
                 </ol>
             </div>
         </div>
@@ -20,12 +20,20 @@
                     <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner bg-light">
                             @if ($product->product_images->isNotEmpty())
-                            @foreach ( $product->product_images as $key=>$productimage )
-                            <div class="carousel-item @if ($key==0) active @endif">
-                                <img class="w-100 h-100" src="{{asset('uploads/images/product/large/'.$productimage->name)}}" alt="Image">
-                            </div>
-                            @endforeach
-                        @endif
+                                @foreach ($product->product_images as $key => $productimage)
+                                    <div class="carousel-item @if ($key == 0) active @endif">
+                                        <img class="w-100 h-100"
+                                            src="{{ asset('uploads/images/product/large/' . $productimage->name) }}"
+                                            alt="Image">
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="carousel-item active ">
+                                    <img class="w-100 h-100" src="{{ asset('admin-asset/img/default-150x150.png') }}"
+                                        alt="Image">
+                                </div>
+                            @endif
+
                         </div>
                         <a class="carousel-control-prev" href="#product-carousel" data-bs-slide="prev">
                             <i class="fa fa-2x fa-angle-left text-dark"></i>
@@ -37,7 +45,7 @@
                 </div>
                 <div class="col-md-7">
                     <div class="bg-light right">
-                        <h1>{{$product->name}}</h1>
+                        <h1>{{ $product->name }}</h1>
                         <div class="d-flex mb-3">
                             <div class="text-primary mr-2">
                                 <small class="fas fa-star"></small>
@@ -49,11 +57,11 @@
                             <small class="pt-1">(99 Reviews)</small>
                         </div>
 
-                        @if ($product->compare_price>0)
-                        <h2 class="price text-secondary"><del>{{$product->compare_price}}</del></h2>
+                        @if ($product->compare_price > 0)
+                            <h2 class="price text-secondary"><del>{{ $product->compare_price }}</del></h2>
                         @endif
 
-                        <h2 class="price ">{{$product->price}}</h2>
+                        <h2 class="price ">{{ $product->price }}</h2>
 
                         <p>{!! $product->short_description !!}</p>
                         <a href="cart.php" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
@@ -83,14 +91,14 @@
                             <div class="tab-pane fade show active" id="description" role="tabpanel"
                                 aria-labelledby="description-tab">
                                 <p>
-                                    {!!$product->description!!}
+                                    {!! $product->description !!}
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
                                 <h5>Shipping Policy:</h5>
-                                <p>{{shippingPolicy}}</p>
-                                <h5 >Return Policy:</h5>
-                                <p>{{returnPolicy}}</p>
+                                <p>{{ shippingPolicy }}</p>
+                                <h5>Return Policy:</h5>
+                                <p>{{ returnPolicy }}</p>
 
                             </div>
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
@@ -103,115 +111,66 @@
         </div>
     </section>
 
-    <section class="pt-5 section-8">
-        <div class="container">
-            <div class="section-title">
-                <h2>Related Products</h2>
-            </div>
-            <div class="col-md-12">
-                <div id="related-products" class="carousel">
-                    <div class="card product-card">
-                        <div class="product-image position-relative">
-                            <a href="" class="product-img"><img class="card-img-top" src=""
-                                    alt=""></a>
-                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+    @if (!empty($relatedProducts))
+        <section class="pt-5 section-8">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Related Products</h2>
+                </div>
+                <div class="col-md-12">
 
-                            <div class="product-action">
-                                <a class="btn btn-dark" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body text-center mt-3">
-                            <a class="h6 link" href="">Dummy Product Title</a>
-                            <div class="price mt-2">
-                                <span class="h5"><strong>$100</strong></span>
-                                <span class="h6 text-underline"><del>$120</del></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card product-card">
-                        <div class="product-image position-relative">
-                            <a href="" class="product-img"><img class="card-img-top" src=""
-                                    alt=""></a>
-                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
-                            <div class="product-action">
-                                <a class="btn btn-dark" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body text-center mt-3">
-                            <a class="h6 link" href="">Dummy Product Title</a>
-                            <div class="price mt-2">
-                                <span class="h5"><strong>$100</strong></span>
-                                <span class="h6 text-underline"><del>$120</del></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card product-card">
-                        <div class="product-image position-relative">
-                            <a href="" class="product-img"><img class="card-img-top" src=""
-                                    alt=""></a>
-                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                    <div id="related-products" class="carousel">
+                        @foreach ($relatedProducts as $relatedProduct)
+                            <div class="card product-card">
+                                <div class="product-image position-relative">
+                                    @if ($relatedProduct->product_images)
+                                        @php
+                                            $image = $relatedProduct->product_images->first();
+                                        @endphp
+                                        <a href="{{ route('front.product', $relatedProduct->slug) }}" class="">
 
-                            <div class="product-action">
-                                <a class="btn btn-dark" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body text-center mt-3">
-                            <a class="h6 link" href="">Dummy Product Title</a>
-                            <div class="price mt-2">
-                                <span class="h5"><strong>$100</strong></span>
-                                <span class="h6 text-underline"><del>$120</del></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card product-card">
-                        <div class="product-image position-relative">
-                            <a href="" class="product-img"><img class="card-img-top" src=""
-                                    alt=""></a>
-                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <img class="card-img-top"
+                                                src="{{ asset('uploads/images/product/small/' . $image->name) }}"
+                                                alt="">
+                                        </a>
+                                        <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                    @else
+                                        <a href="{{ route('front.product', $relatedProduct->slug) }}">
+                                            <img class="card-img-top"
+                                                src="{{ asset('admin-asset/img/default-150x150.png') }}"
+                                                alt=""></a>
+                                        <a class="whishlist" href="222"><i class="far fa-heart"></i>
+                                        </a>
+                                    @endif
 
-                            <div class="product-action">
-                                <a class="btn btn-dark" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body text-center mt-3">
-                            <a class="h6 link" href="">Dummy Product Title</a>
-                            <div class="price mt-2">
-                                <span class="h5"><strong>$100</strong></span>
-                                <span class="h6 text-underline"><del>$120</del></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card product-card">
-                        <div class="product-image position-relative">
-                            <a href="" class="product-img"><img class="card-img-top" src=""
-                                    alt=""></a>
-                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
-                            <div class="product-action">
-                                <a class="btn btn-dark" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                </a>
+                                    <div class="product-action">
+                                        <a class="btn btn-dark" href="#">
+                                            <i class="fa fa-shopping-cart"></i> Add To Cart
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center mt-3">
+                                    <a class="h6 link" href="">{{ $relatedProduct->name }}</a>
+                                    <div class="price mt-2">
+                                        <span class="h5"><strong>{{ $relatedProduct->price }}</strong></span>
+
+                                        @if ($relatedProduct->price < $relatedProduct->compare_price)
+                                            <span
+                                                class="h6 text-underline"><del>{{ $relatedProduct->compare_price }}</del></span>
+                                        @endif
+
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body text-center mt-3">
-                            <a class="h6 link" href="">Dummy Product Title</a>
-                            <div class="price mt-2">
-                                <span class="h5"><strong>$100</strong></span>
-                                <span class="h6 text-underline"><del>$120</del></span>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
+
+
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
+
 @endsection
