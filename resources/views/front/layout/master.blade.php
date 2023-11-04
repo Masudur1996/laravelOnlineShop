@@ -32,6 +32,9 @@
     <meta name="twitter:image:alt" content="" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!-- for ajax csrf -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <link rel="stylesheet" type="text/css" href="{{ asset('front-asset/css/slick.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-asset/css/slick-theme.css') }}" />
@@ -59,7 +62,7 @@
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
-                    <a href="{{route('front.home')}}" class="text-decoration-none">
+                    <a href="{{ route('front.home') }}" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                     </a>
@@ -108,7 +111,7 @@
                                             {{ $category->name }}
                                         </button>
                                     @else
-                                        <a href="{{route('shop.home',[$category->slug])}}" class="btn btn-dark">
+                                        <a href="{{ route('shop.home', [$category->slug]) }}" class="btn btn-dark">
                                             {{ $category->name }}
                                         </a>
                                     @endif
@@ -202,6 +205,14 @@
     <script src="{{ asset('front-asset/js/slick.min.js') }}"></script>
     <script src="{{ asset('front-asset/js/custom.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+    <!-- for ajax csrf -->
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
 
     <script>
         window.onscroll = function() {
@@ -217,6 +228,31 @@
             } else {
                 navbar.classList.remove("sticky");
             }
+        }
+
+        //for add to cart
+        function addToCart(id) {
+
+            $.ajax({
+                url: '{{ route('front.addToCart') }}',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(res) {
+                    console.log(res)
+
+                    if (res.status == false) {
+                        alert(res.message)
+                    } else {
+                        window.location.href = "{{ route('front.cart') }}";
+                        console.log(res)
+                    }
+                },
+                error: function(err) {
+                    console.log(err)
+                }
+            })
         }
     </script>
     @yield('customJs')

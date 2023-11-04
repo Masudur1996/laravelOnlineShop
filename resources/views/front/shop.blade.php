@@ -137,7 +137,7 @@
                                         @endif
 
                                         <div class="product-action">
-                                            <a class="btn btn-dark" href="#">
+                                            <a class="btn btn-dark" onclick="addToCart({{$product->id}})">
                                                 <i class="fa fa-shopping-cart"></i> Add To Cart
                                             </a>
                                         </div>

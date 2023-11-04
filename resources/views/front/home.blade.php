@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="right">
                                     <div class="cat-data">
-                                        <a href="{{route('shop.home',$category->slug)}}" class="text-black">
+                                        <a href="{{ route('shop.home', $category->slug) }}" class="text-black">
                                             <h2>{{ $category->name }}</h2>
                                             <p>{{ $category->products->sum('qty') }}</p>
                                         </a>
@@ -147,12 +147,14 @@
                                     @endphp
 
                                     @if ($image)
-                                        <a href="{{route('front.product',[$featuredProduct->slug])}}" class="product-img"><img class="card-img-top"
+                                        <a href="{{ route('front.product', [$featuredProduct->slug]) }}"
+                                            class="product-img"><img class="card-img-top"
                                                 src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
                                     @else
-                                        <a href="{{route('front.product',[$featuredProduct->slug])}}" class="product-img"><img class="card-img-top"
+                                        <a href="{{ route('front.product', [$featuredProduct->slug]) }}"
+                                            class="product-img"><img class="card-img-top"
                                                 src="{{ asset('admin-asset/img/default-150x150.png') }}"
                                                 alt="Loaing"></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
@@ -160,7 +162,7 @@
 
 
                                     <div class="product-action">
-                                        <a class="btn btn-dark" href="#">
+                                        <a class="btn btn-dark" onclick="addToCart({{ $featuredProduct->id }})">
                                             <i class="fa fa-shopping-cart"></i> Add To Cart
                                         </a>
                                     </div>
@@ -197,19 +199,21 @@
                                         $image = $latestProduct->product_images->first();
                                     @endphp
                                     @if ($image)
-                                        <a href="{{route('front.product',[$latestProduct->slug])}}" class="product-img"><img class="card-img-top"
+                                        <a href="{{ route('front.product', [$latestProduct->slug]) }}"
+                                            class="product-img"><img class="card-img-top"
                                                 src="{{ asset('uploads/images/product/small/' . $image->name) }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
                                     @else
-                                        <a href="{{route('front.product',[$latestProduct->slug])}}" class="product-img"><img class="card-img-top"
+                                        <a href="{{ route('front.product', [$latestProduct->slug]) }}"
+                                            class="product-img"><img class="card-img-top"
                                                 src="{{ asset('admin-asset/img/default-150x150.png') }}"
                                                 alt=""></a>
                                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
                                     @endif
 
                                     <div class="product-action">
-                                        <a class="btn btn-dark" href="#">
+                                        <a class="btn btn-dark" onclick="addToCart({{ $latestProduct->id }})">
                                             <i class="fa fa-shopping-cart"></i> Add To Cart
                                         </a>
                                     </div>
@@ -230,4 +234,10 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('customJs')
+    <script>
+
+    </script>
 @endsection
